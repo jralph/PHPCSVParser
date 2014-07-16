@@ -124,15 +124,15 @@ class Parser {
      * @param  string  $escape
      * @return Illuminate\Support\Collection
      */
-    public function parse($headings = true, $delimiter = ',', $enclosure = '"', $escape = '\\')
+    public function parse($delimiter = ',', $enclosure = '"', $escape = '\\')
     {
         switch ($this->mode) {
             case 'string':
-                $data = $this->parseString($headings, $delimiter, $enclosure, $escape);
+                $data = $this->parseString($delimiter, $enclosure, $escape);
                 break;
             case 'file':
             default:
-                $data = $this->parseFile($headings, $delimiter, $enclosure, $escape);
+                $data = $this->parseFile($delimiter, $enclosure, $escape);
         }
 
         return $data;
@@ -147,7 +147,7 @@ class Parser {
      * @param  string $escape
      * @return Illuminate\Support\Collection
      */
-    private function parseString($getHeadings, $delimiter, $enclosure, $escape)
+    private function parseString($delimiter, $enclosure, $escape)
     {
         $lines = explode("\n", $this->string);
 
@@ -159,9 +159,7 @@ class Parser {
 
         $headings = array_shift($csv);
 
-        if ($getHeadings) {
-            $this->headings = $headings;
-        }
+        $this->headings = $headings;
 
         $data = [];
 
@@ -181,13 +179,13 @@ class Parser {
      * @param  string $escape
      * @return Illuminate\Support\Collection
      */
-    private function parseFile($getHeadings, $delimiter, $enclosure, $escape)
+    private function parseFile($delimiter, $enclosure, $escape)
     {
         $headings = null;
         $data = [];
 
         while (($row = fgetcsv($this->file)) !== false) {
-            if (!$headings && $getHeadings) {
+            if (!$headings) {
                 $headings = $row;
                 $this->headings = $row;
                 continue;
