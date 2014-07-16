@@ -9,7 +9,7 @@ It utilises [Laravel's Collection Object](http://laravel.com/api/class-Illuminat
 - [Installation](#installation)
 - [Usage](#usage)
     - [Using the Constructor](#using-the-constructor)
-    - [Setting the File/String Manually](#setting-the-file-string-manually)
+    - [Setting the File/String Manually](#setting-the-filestring-manually)
     - [Accessing Headings](#accessing-headings)
 - [Parser Options](#parser-options)
 - [Collection Methods](#collection-methods)
