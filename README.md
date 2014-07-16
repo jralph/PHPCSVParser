@@ -30,7 +30,8 @@ PHP CSV Parser is available as a composer package and can be added to your compo
 
 Using PHP CSV Parser is nice and easy. You have a few options when instancing the object.
 
-__NOTE: All data prased by the parser will use the first line as the headings. *ALL CSV FILES MUST HAVE HEADINGS FOR THE PARSER TO WORK*__
+__NOTE: All data prased by the parser will use the first line as the headings.__
+__*ALL CSV FILES MUST HAVE HEADINGS FOR THE PARSER TO WORK*__
 
 ### Using the constructor. ###
 
