@@ -1,4 +1,6 @@
-# PHP CSV Parser #
+# PHP CSV Parser [![Build Status](https://travis-ci.org/jralph/PHPCSVParser.svg)](https://travis-ci.org/jralph/PHPCSVParser) #
+
+[![Latest Stable Version](https://poser.pugx.org/jralph/phpcsvparser/v/stable.svg)](https://packagist.org/packages/jralph/phpcsvparser) [![Total Downloads](https://poser.pugx.org/jralph/phpcsvparser/downloads.svg)](https://packagist.org/packages/jralph/phpcsvparser) [![Latest Unstable Version](https://poser.pugx.org/jralph/phpcsvparser/v/unstable.svg)](https://packagist.org/packages/jralph/phpcsvparser) [![License](https://poser.pugx.org/jralph/phpcsvparser/license.svg)](https://packagist.org/packages/jralph/phpcsvparser)
 
 PHP CSV Parser is a simple csv parser written in php. It can parse csv strings or files.
 
