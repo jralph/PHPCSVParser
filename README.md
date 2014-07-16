@@ -1,4 +1,4 @@
-# PHP CSV Parser #
+# PHP CSV Parser [![Build Status](https://travis-ci.org/jralph/PHPCSVParser.svg)](https://travis-ci.org/jralph/PHPCSVParser) #
 
 PHP CSV Parser is a simple csv parser written in php. It can parse csv strings or files.
 
