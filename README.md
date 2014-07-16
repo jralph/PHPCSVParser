@@ -10,6 +10,7 @@ It utilises [Laravel's Collection Object](http://laravel.com/api/class-Illuminat
 - [Usage](#usage)
     - [Using the Constructor](#using-the-constructor)
     - [Setting the File/String Manually](#setting-the-file-string-manually)
+    - [Accessing Headings](#accessing-headings)
 - [Parser Options](#parser-options)
 - [Collection Methods](#collection-methods)
 
@@ -28,6 +29,8 @@ PHP CSV Parser is available as a composer package and can be added to your compo
 ## Usage ##
 
 Using PHP CSV Parser is nice and easy. You have a few options when instancing the object.
+
+__NOTE: All data prased by the parser will use the first line as the headings. *ALL CSV FILES MUST HAVE HEADINGS FOR THE PARSER TO WORK*__
 
 ### Using the constructor. ###
 
@@ -73,6 +76,34 @@ foreach ($data as $row) {
 
 ?>
 ```
+
+### Accessing Headings ###
+
+At times, you may want to access the headings used in the csv file. This is easily doable by using the `getHeadings` method.
+
+```
+<?php
+
+use Jralph\PHPCSVParser\Parser;
+
+$parser = new Parser;
+
+$parser->loadFile('path/to/file.csv');
+
+// OR
+
+$parser->loadString('"csv","string","here"');
+
+$data = $parser->parse();
+
+$headings = $parser->getHeaders();
+
+var_dump($headings);
+
+?>
+```
+
+If the above example processed a csv file with the heading of `Heading 1, Heading 2 and Heading 3`, the var_dump will contain 3 strings equaling those headings.
 
 ## Parser Options ##
 
