@@ -184,7 +184,7 @@ class Parser {
         $headings = null;
         $data = [];
 
-        while (($row = fgetcsv($this->file)) !== false) {
+        while (($row = fgetcsv($this->file, 0, $delimiter, $enclosure, $escape)) !== false) {
             if (!$headings) {
                 $headings = $row;
                 $this->headings = $row;
