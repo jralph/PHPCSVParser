@@ -31,6 +31,26 @@ class ParserTest extends PHPUnit_Framework_TestCase {
             'Data',
             'Headings'
         ];
+
+        $this->csvFilePipe = __DIR__.'/_data/delimiter.csv';
+        $this->csvStringPipe = file_get_contents($this->csvFilePipe);
+        $this->expectedPipe = new Collection([
+            (object) [
+                'Some' => 'Actual',
+                'Data' => 'Row',
+                'Headings' => 'Data'
+            ],
+            (object) [
+                'Some' => 'Actual',
+                'Data' => 'Row',
+                'Headings' => 'Data'
+            ]
+        ]);
+        $this->expectedHeadingsPipe = [
+            'Some',
+            'Data',
+            'Headings'
+        ];
     }
 
     public function testClassExists()
@@ -138,6 +158,46 @@ class ParserTest extends PHPUnit_Framework_TestCase {
         $parser = new Parser($this->csvString);
 
         $this->assertInternalType('string', $parser->getMode());
+    }
+
+    public function testFileParseCanParseWithOtherDelimiter()
+    {
+        $parser = new Parser($this->csvFilePipe);
+
+        $collection = $parser->parse('|');
+
+        $this->assertEquals($this->expectedPipe, $collection);
+    }
+
+    public function testStringParseCanParseWithOtherDelimiter()
+    {
+        $parser = new Parser($this->csvStringPipe);
+
+        $collection = $parser->parse('|');
+
+        $this->assertEquals($this->expectedPipe, $collection);
+    }
+
+    public function testFileParseCanParseWithOtherDelimiterHasCorrectHeadings()
+    {
+        $parser = new Parser($this->csvFilePipe);
+
+        $collection = $parser->parse('|');
+
+        $headings = $parser->getHeadings();
+
+        $this->assertEquals($this->expectedHeadingsPipe, $headings);
+    }
+
+    public function testStringParseCanParseWithOtherDelimiterHasCorrectHeadings()
+    {
+        $parser = new Parser($this->csvStringPipe);
+
+        $collection = $parser->parse('|');
+
+        $headings = $parser->getHeadings();
+
+        $this->assertEquals($this->expectedHeadingsPipe, $headings);
     }
 
 }
