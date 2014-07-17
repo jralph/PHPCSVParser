@@ -51,6 +51,12 @@ class ParserTest extends PHPUnit_Framework_TestCase {
             'Data',
             'Headings'
         ];
+
+        $this->expectedHeadingsNormalized = [
+            'some',
+            'data',
+            'headings'
+        ];
     }
 
     public function testClassExists()
@@ -198,6 +204,18 @@ class ParserTest extends PHPUnit_Framework_TestCase {
         $headings = $parser->getHeadings();
 
         $this->assertEquals($this->expectedHeadingsPipe, $headings);
+    }
+
+    public function testParserCanNormalizeHeadings()
+    {
+        $parser = new Parser($this->csvFile);
+
+        $parser->setNormalize();
+        $parser->parse();
+
+        $headings = $parser->getHeadings();
+
+        $this->assertEquals($this->expectedHeadingsNormalized, $headings);
     }
 
 }

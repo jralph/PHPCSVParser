@@ -46,6 +46,12 @@ class Parser {
     private $mode = null;
 
     /**
+     * Should the headers be normalized to lowercase or not?
+     * @var boolean
+     */
+    private $normalize = false;
+
+    /**
      * Optioanlly construct the class with the string or file path.
      * 
      * @param string $string The CSV string or file path.
@@ -63,6 +69,15 @@ class Parser {
             $this->loadString($string);
             $this->mode = 'string';
         }
+    }
+
+    /**
+     * Turn normalization on or off.
+     * @param boolean $value
+     */
+    public function setNormalize($value = true)
+    {
+        $this->normalize = $value;
     }
 
     /**
@@ -159,7 +174,8 @@ class Parser {
 
         $headings = array_shift($csv);
 
-        $this->headings = $headings;
+        $this->setHeadings($headings);
+        $headings = $this->getHeadings();
 
         $data = [];
 
@@ -186,8 +202,8 @@ class Parser {
 
         while (($row = fgetcsv($this->file, 0, $delimiter, $enclosure, $escape)) !== false) {
             if (!$headings) {
-                $headings = $row;
-                $this->headings = $row;
+                $this->setHeadings($row);
+                $headings = $this->getHeadings();
                 continue;
             }
 
@@ -196,6 +212,37 @@ class Parser {
         fclose($this->file);
 
         return new Collection($data);
+    }
+
+    /**
+     * Lower case all of the heading values.
+     * 
+     * @param  array  $headings
+     * @return array
+     */
+    private function lowerCaseHeadings(array $headings)
+    {
+        $lowerCase = [];
+
+        foreach ($headings as $heading) {
+            $lowerCase[] = strtolower($heading);
+        }
+
+        return $lowerCase;
+    }
+
+    /**
+     * Set the headings.
+     *
+     * @param array $headings
+     */
+    private function setHeadings(array $headings)
+    {
+        if ($this->normalize) {
+            $headings = $this->lowerCaseHeadings($headings);
+        }
+
+        $this->headings = $headings;
     }
 
     /**
