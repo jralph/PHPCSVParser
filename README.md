@@ -50,6 +50,7 @@ $data = $parser->parse();
 
 foreach ($data as $row) {
     // Do something with each row.
+    echo $row->phone_number;
 }
 ?>
 ```
@@ -75,6 +76,7 @@ $data = $parser->parse();
 
 foreach ($data as $row) {
     // Do something with each row.
+    echo $row->phone_number;
 }
 
 ?>
@@ -176,6 +178,7 @@ $filtered = $data->filter(function($row)
 
 foreach ($filtered as $row) {
     // Do something to the data for bob and jim.
+    echo $row->phone_number;
 }
 
 ?>
@@ -205,6 +208,7 @@ $data->each(function($row)
 
 foreach ($data as $row) {
     // Do something to the data.
+    echo $row->phone_number;
 }
 
 ?>
