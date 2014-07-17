@@ -13,6 +13,7 @@ It utilises [Laravel's Collection Object](http://laravel.com/api/class-Illuminat
     - [Using the Constructor](#using-the-constructor)
     - [Setting the File/String Manually](#setting-the-filestring-manually)
     - [Accessing Headings](#accessing-headings)
+    - [Normalizing Headings](#normalizing-headings)
 - [Parser Options](#parser-options)
 - [Collection Methods](#collection-methods)
 
@@ -109,6 +110,34 @@ var_dump($headings);
 ```
 
 If the above example processed a csv file with the heading of `Heading 1, Heading 2 and Heading 3`, the var_dump will contain 3 strings equaling those headings.
+
+### Normalizing Headings ###
+
+Some tiems you may have haedings that use a mix of upper case and lower case characters. This can be annoying when trying to guess if you need to use an upper case variable or a lower case one.
+
+The parser offers a simple solution to this. It can normalize the headings to lowercase for you.
+
+To do this, just enable the normalization before running the `parse()` method.
+
+```
+<?php
+
+use Jralph\PHPCSVParser\Parser;
+
+$parser = new Parser('path/to/file.csv');
+
+$parser->setNormalize(true); // You can turn it off later on by using false instead.
+
+$data = $parser->parse();
+
+$headings = $parser->getHeaders();
+
+var_dump($headings);
+
+?>
+```
+
+In the above example, the haedings will be var_dumped out in lowercase.
 
 ## Parser Options ##
 
