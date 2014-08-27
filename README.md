@@ -4,18 +4,12 @@
 
 PHP CSV Parser is a simple csv parser written in php. It can parse csv strings or files.
 
-It utilises [Laravel's Collection Object](http://laravel.com/api/class-Illuminate.Support.Collection.html) to help with organising csv rows. 
+It utilises [Laravel's Support Library](http://laravel.com/api/namespace-Illuminate.Support.html) to help with providing a simple and clean structure.
 
 ### Contents ###
 
 - [Installation](#installation)
 - [Usage](#usage)
-    - [Using the Constructor](#using-the-constructor)
-    - [Setting the File/String Manually](#setting-the-filestring-manually)
-    - [Accessing Headings](#accessing-headings)
-    - [Normalizing Headings](#normalizing-headings)
-- [Parser Options](#parser-options)
-- [Collection Methods](#collection-methods)
 
 ## Installation ##
 
@@ -31,216 +25,110 @@ PHP CSV Parser is available as a composer package and can be added to your compo
 
 ## Usage ##
 
-Using PHP CSV Parser is nice and easy. You have a few options when instancing the object.
+Using the CSV parser is simple and can be done by directly accessing the `Jralph\PHPCSVParser\ParserManager` class, or either of the Parser classes (`Jralph\PHPCSVParser\Parsers\StringParser` or `Jralph\PHPCSVParser\Parsers\FileParser`).
 
-__NOTE: All data prased by the parser will use the first line as the headings.__
-__*ALL CSV FILES MUST HAVE HEADINGS FOR THE PARSER TO WORK*__
-
-### Using the constructor. ###
-
-The easiest way to parse a csv is to use the constructor of the object to pass in a file path or a csv string.
+For ease of use, there is also a `facade` that has been created. `Jralph\PHPCSVParser\Facades\Parser`. This `facade` can call the `create` method on the `ParserManager` object.
 
 ```
 <?php
 
-use Jralph\PHPCSVParser\Parser;
+use Jralph\PHPCSVParser\Facades\Parser;
+use Jralph\PHPCSVParser\ParserManager;
+use Jralph\PHPCSVParser\Parsers\FileParser;
+use Jralph\PHPCSVParser\Parsers\StringParser;
 
-$parser = new Parser(__DIR__.'/mycsvfile.csv'); // Or new Parser('"csv","string","here"');
- 
-$data = $parser->parse();
+// Using the Facade (AUTO DETECTS STRING OR FILE)
+$parser = Parser::create('csv string or path to file here.');
 
-foreach ($data as $row) {
-    // Do something with each row.
-    echo $row->phone_number;
-}
-?>
-```
+// Using the ParserManager (AUTO DETECTS STRING OR FILE)
+$parser = new ParserManager;
+$parser->create('csv string of path to file here.');
 
-### Setting the file/string manually. ###
+// Using the File Parser (NO AUDO DETECTION)
+$parser = new FileParser('path/to/file/here');
 
-If you do not want to use the constructor, you can use one of the provided methods to load in a string or file.
+// Using the String Parser (NO AUDO DETECTION)
+$parser = new StringParser('"csv","string","here"');
 
-```
-<?php
+// Once you have an instance of a parser, you can parse the csv.
+// You can optionally pass in any of the paramaters below.
+$csv = $parser->parse($delimiter = ',', $enclosure = '"', $escape = '\\');
 
-use Jralph\PHPCSVParser\Parser;
+// Or no paramaters at all.
+$csv = $parser->parse();
 
-$parser = new Parser;
-
-$parser->loadFile('path/to/file.csv');
-
-// OR
-
-$parser->loadString('"csv","string","here"');
-
-$data = $parser->parse();
-
-foreach ($data as $row) {
-    // Do something with each row.
-    echo $row->phone_number;
-}
+// Maybe your csv does not have column headings.
+$csv = $parser->withoutHeadings()->parse();
 
 ?>
 ```
 
-### Accessing Headings ###
+### Working with the CSV ###
 
-At times, you may want to access the headings used in the csv file. This is easily doable by using the `getHeadings` method.
-
-```
-<?php
-
-use Jralph\PHPCSVParser\Parser;
-
-$parser = new Parser;
-
-$parser->loadFile('path/to/file.csv');
-
-// OR
-
-$parser->loadString('"csv","string","here"');
-
-$data = $parser->parse();
-
-$headings = $parser->getHeaders();
-
-var_dump($headings);
-
-?>
-```
-
-If the above example processed a csv file with the heading of `Heading 1, Heading 2 and Heading 3`, the var_dump will contain 3 strings equaling those headings.
-
-### Normalizing Headings ###
-
-Some tiems you may have haedings that use a mix of upper case and lower case characters. This can be annoying when trying to guess if you need to use an upper case variable or a lower case one.
-
-The parser offers a simple solution to this. It can normalize the headings to lowercase for you.
-
-To do this, just enable the normalization before running the `parse()` method.
+Once you have parsed the CSV, you will be given a `CSV` object. This object contains a collection of headers (if any) and a collection of all of the csv rows.
 
 ```
 <?php
 
-use Jralph\PHPCSVParser\Parser;
+use Jralph\PHPCSVParser\Facades\Parser;
+use Jralph\PHPCSVParser\ParserManager;
+use Jralph\PHPCSVParser\Parsers\FileParser;
+use Jralph\PHPCSVParser\Parsers\StringParser;
 
-$parser = new Parser('path/to/file.csv');
+$parser = Parser::create('csv string or path to file here.');
 
-$parser->setNormalize(true); // You can turn it off later on by using false instead.
+$csv = $parser->parse();
 
-$data = $parser->parse();
-
-$headings = $parser->getHeaders();
-
-var_dump($headings);
-
-?>
-```
-
-In the above example, the haedings will be var_dumped out in lowercase.
-
-## Parser Options ##
-
-When parsing a csv file you may need to use a different delimiter (such as the pipe `|`). Or maybe you have a different enclosure or escape characters.
-
-This is easily changable by using the optional arguments for the `parse()` method.
-
-The parse method can accept the following methods.
-
-```
-$parser->parse([string $delimiter = ',' [, string $enclosure = '"' [, string $escape = '\\']]]);
-
-// Example
-$parser->parse('|', '');
-```
-
-The above example would parse a csv file/string usign the pipe as a delimiter, with no field enclosures. Below is an example of some csv data that could be parsed by the above example.
-
-```
-Heading 1|Heading 2|Heading 3
-Data1|Data2|Data3
-```
-
-## Collection Methods ##
-
-Laravel's collection object has some very useful methods for interacting with our data.
-
-Below you can find some of the methods that are useful when used with the CSV Parser. For a full list, check out the [Laravel API Documentation](http://laravel.com/api/class-Illuminate.Support.Collection.html).
-
-### ToArray and ToJson ###
-
-Need to convert the CSV data into a simple array or into json, no problem.
-
-```
-<?php
-
-use Jralph\PHPCSVParser\Parser;
-
-$parser = new Parser(__DIR__.'/mycsvfile.csv'); // Or new Parser('"csv","string","here"');
- 
-$data = $parser->parse();
-
-$array = $data->toArray();
-
-$json = $data->toJson();
-
-?>
-```
-
-### Filter ###
-
-You can easily filter data within the collection by using the filter method.
-
-```
-<?php
-
-use Jralph\PHPCSVParser\Parser;
-
-$parser = new Parser(__DIR__.'/mycsvfile.csv'); // Or new Parser('"csv","string","here"');
- 
-$data = $parser->parse();
-
-$filtered = $data->filter(function($row)
-{
-    if (in_array($row->name, ['bob', 'jim'])) return true;
-});
-
-foreach ($filtered as $row) {
-    // Do something to the data for bob and jim.
-    echo $row->phone_number;
+foreach ($csv->rows() as $row) {
+    // Do something with the rows.
 }
 
 ?>
 ```
 
-The above example will only return the data when the name column of the csv data is equal to 'bob' or 'jim'.
+#### CSV Rows ####
 
-### Each ###
+When looping through csv rows, each row is returned as an instance of the CSVRow object.
 
-Iterating over each array item is also nice and easy. Say you have a csv containing people's phone number, but you want to replace the country code (+44 and so on) with a 0. This is really easy to do.
+You can access data through this object in many ways.
 
 ```
 <?php
 
-use Jralph\PHPCSVParser\Parser;
+use Jralph\PHPCSVParser\Facades\Parser;
+use Jralph\PHPCSVParser\ParserManager;
+use Jralph\PHPCSVParser\Parsers\FileParser;
+use Jralph\PHPCSVParser\Parsers\StringParser;
 
-$parser = new Parser(__DIR__.'/mycsvfile.csv'); // Or new Parser('"csv","string","here"');
- 
-$data = $parser->parse();
+$parser = Parser::create('csv string or path to file here.');
 
-$data->each(function($row)
-{
-    $row->phone_number = str_replace('+44', '0', $row->phone_number);
+$csv = $parser->parse();
 
-    return $row;
-});
+foreach ($csv->rows() as $row) {
+    // We have not told the parser to process without headings, so we can access
+    // each row by its heading name.
+    echo $row->heading1; // As an object.
+    echo $row['heading2']; // As an array.
+    echo $row->getRow('heading3'); // By a method.
+}
 
-foreach ($data as $row) {
-    // Do something to the data.
-    echo $row->phone_number;
+// If we do not have or know the headings, we can loop through the row attributes.
+foreach ($csv->rows() as $row {
+    // Loop through the $row object.
+    foreach ($row as $column) {
+        echo $column;
+    }
+
+    // Get an array of all attributes.
+    $attributes = $row->getAttributes();
 }
 
 ?>
 ```
 
-In the above example, any phone numbers containing +44 have had the +44 part replaced with a 0.
+## Arrays and JSON ##
+
+The following objects contain convertors to convert the object to an array and to json.
+
+- `CSV`
+- `CSVRow`
