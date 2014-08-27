@@ -10,6 +10,8 @@ It utilises [Laravel's Support Library](http://laravel.com/api/namespace-Illumin
 
 - [Installation](#installation)
 - [Usage](#usage)
+    - [Working with the CSV](#working-with-the-csv)
+    - [CSV Rows](#csv-rows)
 
 ## Installation ##
 
@@ -113,7 +115,7 @@ foreach ($csv->rows() as $row) {
 }
 
 // If we do not have or know the headings, we can loop through the row attributes.
-foreach ($csv->rows() as $row {
+foreach ($csv->rows() as $row) {
     // Loop through the $row object.
     foreach ($row as $column) {
         echo $column;
@@ -132,3 +134,24 @@ The following objects contain convertors to convert the object to an array and t
 
 - `CSV`
 - `CSVRow`
+
+```
+<?php
+
+use Jralph\PHPCSVParser\Facades\Parser;
+use Jralph\PHPCSVParser\ParserManager;
+use Jralph\PHPCSVParser\Parsers\FileParser;
+use Jralph\PHPCSVParser\Parsers\StringParser;
+
+$parser = Parser::create('csv string or path to file here.');
+
+$csv = $parser->parse();
+
+echo $csv->toJson(); // Echo the entire csv, headings and rows, as json.
+
+foreach ($csv->rows() as $row) {
+    echo $row->toJson(); // Echo the entire row as json.
+}
+
+?>
+```

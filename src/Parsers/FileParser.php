@@ -3,6 +3,7 @@
 use Illuminate\Support\Collection;
 use Jralph\PHPCSVParser\CSV;
 use Jralph\PHPCSVParser\CSVRow;
+use Exception;
 
 class FileParser implements ParserInterface {
 
@@ -24,7 +25,7 @@ class FileParser implements ParserInterface {
 
     public function parse($delimiter = ',', $enclosure = '"', $escape = '\\')
     {
-        if (is_readable($this->csv))
+        if (!is_readable($this->csv))
         {
             throw new Exception('Unable to raed file: '.$this->csv);
         }
