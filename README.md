@@ -20,7 +20,7 @@ PHP CSV Parser is available as a composer package and can be added to your compo
 ```
 "require": {
     ...
-    "jralph/phpcsvparser": "1.*"
+    "jralph/phpcsvparser": "2.*"
     ...
 }
 ```
