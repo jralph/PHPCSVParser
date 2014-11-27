@@ -1,14 +1,13 @@
 <?php namespace Jralph\PHPCSVParser\Parsers;
 
-use Illuminate\Support\Collection;
 use Jralph\PHPCSVParser\CSV;
 use Jralph\PHPCSVParser\CSVRow;
 
-class StringParser implements ParserInterface {
+class StringParser extends AbstractParser implements ParserInterface {
 
-    private $headings = true;
+    protected $headings = true;
 
-    private $csv;
+    protected $csv;
 
     public function __construct($csv)
     {
@@ -32,26 +31,9 @@ class StringParser implements ParserInterface {
             $csv[] = str_getcsv($line, $delimiter, $enclosure, $escape);
         }
 
-        if ($this->headings) {
-            $data = $this->combineHeadings($csv);
-        } else {
-            $data = $csv;
-        }
+        $data = $this->combineHeadings($csv);
 
         return $this->createCsv($data);
-    }
-
-    private function combineHeadings($rows)
-    {
-        $headings = array_shift($rows);
-
-        $data = [];
-
-        foreach ($rows as $row) {
-            $data[] = array_combine($headings, $row);
-        }
-
-        return $data;
     }
 
     private function createRows($rows)

@@ -1,15 +1,14 @@
 <?php namespace Jralph\PHPCSVParser\Parsers;
 
-use Illuminate\Support\Collection;
 use Jralph\PHPCSVParser\CSV;
 use Jralph\PHPCSVParser\CSVRow;
 use Exception;
 
-class FileParser implements ParserInterface {
+class FileParser extends AbstractParser implements ParserInterface {
 
-    private $headings = true;
+    protected $headings = true;
 
-    private $csv;
+    protected $csv;
 
     public function __construct($csv)
     {
@@ -27,7 +26,7 @@ class FileParser implements ParserInterface {
     {
         if (!is_readable($this->csv))
         {
-            throw new Exception('Unable to raed file: '.$this->csv);
+            throw new Exception('Unable to read file: '.$this->csv);
         }
 
         $file = fopen($this->csv, 'r');
@@ -39,26 +38,9 @@ class FileParser implements ParserInterface {
         }
         fclose($file);
 
-        if ($this->headings) {
-            $data = $this->combineHeadings($csv);
-        } else {
-            $data = $csv;
-        }
+        $data = $this->combineHeadings($csv);
 
         return $this->createCsv($data);
-    }
-
-    private function combineHeadings($rows)
-    {
-        $headings = array_shift($rows);
-
-        $data = [];
-
-        foreach ($rows as $row) {
-            $data[] = array_combine($headings, $row);
-        }
-
-        return $data;
     }
 
     private function createRows($rows)

@@ -39,4 +39,15 @@ class FileParserTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Illuminate\Support\Collection', $this->parser->parse()->rows());
     }
 
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Unable to read file: somecsv.csv
+     */
+    public function testParserThrowsExceptionIfCSVIsNotReadable()
+    {
+        $parser = new FileParser('somecsv.csv');
+
+        $parser->parse();
+    }
+
 }

@@ -91,7 +91,7 @@ class CSVRow implements ArrayableInterface, JsonableInterface, ArrayAccess {
 
     /**
      * Convert the row to an array.
-     * 
+     *
      * @return array
      */
     public function toArray()
