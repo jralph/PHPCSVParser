@@ -1,9 +1,5 @@
 <?php namespace Jralph\PHPCSVParser\Parsers;
 
-use Jralph\PHPCSVParser\CSV;
-use Jralph\PHPCSVParser\CSVRow;
-use Exception;
-
 abstract class AbstractParser {
 
     protected function combineHeadings($rows)
