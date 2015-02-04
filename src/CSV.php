@@ -1,10 +1,10 @@
 <?php namespace Jralph\PHPCSVParser;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Contracts\ArrayableInterface;
-use Illuminate\Support\Contracts\JsonableInterface;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 
-class CSV implements ArrayableInterface, JsonableInterface  {
+class CSV implements Arrayable, Jsonable  {
 
     protected $headings = null;
 
