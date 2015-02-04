@@ -46,10 +46,10 @@ $parser = Parser::create('csv string or path to file here.');
 $parser = new ParserManager;
 $parser->create('csv string of path to file here.');
 
-// Using the File Parser (NO AUDO DETECTION)
+// Using the File Parser (NO AUTO DETECTION)
 $parser = new FileParser('path/to/file/here');
 
-// Using the String Parser (NO AUDO DETECTION)
+// Using the String Parser (NO AUTO DETECTION)
 $parser = new StringParser('"csv","string","here"');
 
 // Once you have an instance of a parser, you can parse the csv.
