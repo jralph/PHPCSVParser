@@ -1,10 +1,10 @@
 <?php namespace Jralph\PHPCSVParser;
 
-use Illuminate\Support\Contracts\ArrayableInterface;
-use Illuminate\Support\Contracts\JsonableInterface;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use ArrayAccess;
 
-class CSVRow implements ArrayableInterface, JsonableInterface, ArrayAccess {
+class CSVRow implements Arrayable, Jsonable, ArrayAccess {
 
     /**
      * An array of attributes related to the csv row.
